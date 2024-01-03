@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,7 +29,7 @@ public class UserController {
         return "user/list";
     }
 
-    // ----- 追加:ここから -----
+
     /** Display User registration screen */
     @GetMapping("/register")
     public String getRegister(@ModelAttribute User user) {
@@ -42,6 +43,25 @@ public class UserController {
      // User Registration
         service.saveUser(user);
         // Redirect to list screen
+        return "redirect:/user/list";
+    }
+
+    // ----- 追加:ここから -----
+    /** Display User update screen */
+    @GetMapping("/update/{id}/")
+    public String getUser(@PathVariable("id") Integer id, Model model) {
+     // Register for Model
+        model.addAttribute("user", service.getUser(id));
+     // Go to User update screen
+        return "user/update";
+    }
+
+    /** User update process */
+    @PostMapping("/update/{id}/")
+    public String postUser(User user) {
+     // User Registration
+        service.saveUser(user);
+     // Redirect to list screen
         return "redirect:/user/list";
     }
     // ----- 追加:ここまで -----
