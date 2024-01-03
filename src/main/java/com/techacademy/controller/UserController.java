@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.Set;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.techacademy.entity.User;
 import com.techacademy.service.UserService;
@@ -46,8 +49,7 @@ public class UserController {
         return "redirect:/user/list";
     }
 
-    // ----- 追加:ここから -----
-    /** Display User update screen */
+      /** Display User update screen */
     @GetMapping("/update/{id}/")
     public String getUser(@PathVariable("id") Integer id, Model model) {
      // Register for Model
@@ -61,6 +63,15 @@ public class UserController {
     public String postUser(User user) {
      // User Registration
         service.saveUser(user);
+     // Redirect to list screen
+        return "redirect:/user/list";
+    }
+    // ----- 追加:ここから -----
+    /** User deletion process */
+    @PostMapping(path="list", params="deleteRun")
+    public String deleteRun(@RequestParam(name="idck") Set<Integer> idck, Model model) {
+     // Delete User in bulk
+        service.deleteUser(idck);
      // Redirect to list screen
         return "redirect:/user/list";
     }
