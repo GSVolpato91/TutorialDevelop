@@ -3,7 +3,11 @@ package com.techacademy.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.techacademy.entity.User;
 import com.techacademy.service.UserService;
 
 @Controller
@@ -15,12 +19,30 @@ public class UserController {
         this.service = service;
     }
 
-    /** 一覧画面を表示 */
+    /** display list screen */
     @GetMapping("/list")
     public String getList(Model model) {
-        // 全件検索結果をModelに登録
+        // Register all search results to Model
         model.addAttribute("userlist", service.getUserList());
-        // user/list.htmlに画面遷移
+        // Screen transition to user/list.html
         return "user/list";
     }
+
+    // ----- 追加:ここから -----
+    /** Display User registration screen */
+    @GetMapping("/register")
+    public String getRegister(@ModelAttribute User user) {
+     // Go to User registration screen
+        return "user/register";
+    }
+
+    /** User registration process */
+    @PostMapping("/register")
+    public String postRegister(User user) {
+     // User Registration
+        service.saveUser(user);
+        // Redirect to list screen
+        return "redirect:/user/list";
+    }
+    // ----- 追加:ここまで -----
 }
